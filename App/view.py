@@ -31,6 +31,7 @@ import threading
 from App import controller
 from DISClib.ADT import stack
 assert config
+import time
 
 """
 La vista se encarga de la interacción con el usuario.
@@ -44,7 +45,7 @@ operación seleccionada.
 # ___________________________________________________
 
 
-servicefile = 'bus_routes_14000.csv'
+servicefile = 'bus_routes_50.csv'
 initialStation = None
 
 # ___________________________________________________
@@ -97,10 +98,12 @@ def optionSix(cont, destStation):
     path = controller.minimumCostPath(cont, destStation)
     if path is not None:
         pathlen = stack.size(path)
-        print('El camino es de longitud: ' + str(pathlen))
+        
         while (not stack.isEmpty(path)):
             stop = stack.pop(path)
             print(stop)
+
+        print('El camino es de longitud: ' + str(pathlen))
     else:
         print('No hay camino')
 
@@ -135,7 +138,15 @@ def thread_cycle():
         elif int(inputs[0]) == 4:
             msg = "Estación Base: BusStopCode-ServiceNo (Ej: 75009-10): "
             initialStation = input(msg)
+
+            StartTime=time.process_time()
+
             optionFour(cont, initialStation)
+
+            StopTime=time.process_time()
+            TimeMseg=(StopTime-StartTime)*1000
+            print()
+            print(f'El REQ4 tardó {TimeMseg} miliseg')
 
         elif int(inputs[0]) == 5:
             destStation = input("Estación destino (Ej: 15151-10): ")
@@ -143,7 +154,15 @@ def thread_cycle():
 
         elif int(inputs[0]) == 6:
             destStation = input("Estación destino (Ej: 15151-10): ")
+
+            StartTime=time.process_time()
+
             optionSix(cont, destStation)
+
+            StopTime=time.process_time()
+            TimeMseg=(StopTime-StartTime)*1000
+            print()
+            print(f'El REQ6 tardó {TimeMseg} miliseg')
 
         elif int(inputs[0]) == 7:
             optionSeven(cont)
